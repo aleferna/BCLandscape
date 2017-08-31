@@ -5,11 +5,13 @@ require(circlize)
 
 require(clValid)
 require(ConsensusClusterPlus)
-library(reshape2)
-library(igraph)
-
+library(reshape2)   
+library(igraph)  
+ 
 require(doMC)
 registerDoMC(32)
+
+
 
 load("../DATA/colorRanges.Rdata")
 dtMeta=read.table(file="../DATA/meta.tab",sep = "\t",header = T,stringsAsFactors = F)
