@@ -1,0 +1,129 @@
+#1. Open gml
+#2. Filter edges with kcore < 2, and pearson < 0.5 (filters negative ) 
+#3. Set node size to 20
+#4. Layout ForceAtlas2, scaling 1, Gravity 5, Prevent Overlap
+#5. Preview -> Edge Opacity 30, Border Width 0.1, edge not curved, edge color source, show labels
+
+
+from java.awt import Color
+import math
+
+for n in g.nodes:  
+    n.label = ""
+
+RedToBlue= [Color(0xFFF0000),Color(0xFFF2400),Color(0xFFF4900),Color(0xFFF6E00),Color(0xFFF9200),Color(0xFE2921C),Color(0xFAA6E54),Color(0xF71498D),Color(0xF3824C6),Color(0xF0000FF)]
+BlueToRed= [Color(0xF0000FF),Color(0xF3824C6),Color(0xF71498D),Color(0xFAA6E54),Color(0xFE2921C),Color(0xFFF9200),Color(0xFFF6E00),Color(0xFFF4900),Color(0xFFF2400),Color(0xFFF0000)]
+ColorBlind=[Color(0xffffd9 ),Color(0xffffd9 ),Color(0xedf8b1 ),Color(0xc7e9b4 ),Color(0x7fcdbb ),Color(0x41b6c4 ),Color(0x1d91c0 ),Color(0x225ea8 ),Color(0x253494 ),Color(0x081d58 )]
+BuRd=[Color(0x053061),Color(0x2166ac),Color(0x4393c3),Color(0x92c5de),Color(0xd1e5f0),Color(0xf7f7f7),Color(0xfddbc7),Color(0xf4a582),Color(0xd6604d),Color(0xb2182b),Color(0x67001f)]
+RdGryCyan=[Color(0xFF0000),Color(0xCB2121),Color(0xB13232),Color(0x974242),Color(0x7D5353),Color(0x646464),Color(0x537D7D),Color(0x429797),Color(0x32B1B1),Color(0x21CBCB),Color(0x00FFFF)]
+
+def doGraph(fld,CR,CRname):
+  for n in g.nodes:  
+     v = n[fld]
+     v = min( 1,v)
+     v = max(-1,v) 
+     v = int(round( 5*v ) )
+     n.color = CR[v+5]
+  exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Quantitative/sz20.0_FA.Gr1.Sc2_RG1to1_"+CRname+"_"+fld+".pdf")
+
+
+flds=["cons1","cons2","cons3","cons4","cons5","cons6", "pam50lumb"  , "pam50normal", "pam50her2" ,  "pam50luma"  ,"pam50basal"  ]
+for fld in flds: 
+  doGraph(fld,BuRd,"RedToBlue")
+
+
+
+
+def doGraphCNV(fld,CR,CRname):
+  for n in g.nodes:  
+     v = n[fld]
+     v = min( 0.5,v)
+     v = max(-0.5,v) 
+     v = int(round( 10*v ) )
+     n.color = CR[v+5]
+  exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Quantitative/sz20.0_FA.Gr1.Sc2_RG1to1_"+CRname+"_"+fld+".pdf")
+
+#  exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Quantitative/sz20.0_FA.Gr1.Sc2_RG1to1_"+CRname+"_"+fld+".pdf")
+
+
+flds=["bclandscapeproteinclustering","brcauscnvbypam50basal","brcauscnvbypam50her2","brcauscnvbypam50luma","brcauscnvbypam50lumb","brcauscnvbypam50na","brcauscnvbypam50normal","brcausmutbypam50basal","brcausmutbypam50her2","brcausmutbypam50luma","brcausmutbypam50lumb","brcausmutbypam50na","brcausmutbypam50normal","ovcnvbystagena","ovcnvbystagestageia","ovcnvbystagestageib","ovcnvbystagestageic","ovcnvbystagestageiia","ovcnvbystagestageiib","ovcnvbystagestageiic","ovcnvbystagestageiiia","ovcnvbystagestageiiib","ovcnvbystagestageiiic","ovcnvbystagestageiv","pradcnvprostateadenocarcinomaacinartype","pradcnvprostateadenocarcinomaothersubtype"]
+for fld in flds: 
+  doGraphCNV(fld,RdGryCyan,"RdGryCyan")
+
+
+
+
+def colorList(lst, lstname):
+  for n in g.nodes:
+     if str(n.name) in lst: 
+        n.color = yellow
+        n.label = n.name
+     else: 
+        n.color = Color(0x999999)
+        n.label = ""
+  exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Other/"+lstname+".pdf")
+  exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Other/"+lstname+".pdf")
+
+
+lstname="MSigDB_Estrogen_Response_Early"
+lst=["GREB1","CA12","SLC9A3R1","MYB","ANXA9","IGFBP4","SYBU","NPY1R","PDZK1","NRIP1","MLPH","HSPB8","EGR3","KRT19","LRIG1","KDM4B","PGR","RHOBTB3","TPD52L1","ELOVL2","RET","TPBG","TFF1","MAPT","SCNN1A","ABAT","FLNB","XBP1","CELSR2","RAB31","MYBL1","MREG","FAM102A","MSMB","STC2","FAM134B","SIAH2","ZNF185","SLC19A2","SLC1A4","FHL2","BCL2","PMAIP1","AREG","OVOL2","TSKU","ADCY9","RASGRP1","MUC1","KAZN","SLC27A2","FKBP4","CXCL12","TMPRSS3","RARA","IL17RB","CBFA2T3","TFF3","UGCG","CCND1","SLC22A5","WFS1","PTGES","WWC1","WISP2","MYC","ITPK1","TMEM164","ARL3","MED13L","SEMA3B","KRT18","SLC16A1","TJP3","SLC26A2","FAIM3","SULT2B1","SNX24","TFAP2C","TTC39A","GJA1","PRSS23","OLFM1","RAPGEFL1","ASB13","TIPARP","ABCA3","FRK","DHRS2","AQP3","KCNK15","TGIF2","FOXC1","ELF3","REEP1","PEX11A","PODXL","KLF4","BAG1","CELSR1","PLA2G16","SLC7A5","MPPED2","TIAM1","CLDN7","MYOF","RBBP8","OLFML3","GFRA1","FARP1","SVIL","TGM2","DEPTOR","CYP26B1","PAPSS2","SLC1A1","DLC1","JAK2","AFF1","KLK10","P2RY2","BLVRB","CISH","GLA","ADD3","PDLIM3","FAM63A","FOS","KRT8","SLC37A1","B4GALT1","CALCR","ESRP2","IGF1R","NBL1","SFN","OPN3","ABHD2","AR","SLC39A6","SYT12","CD44","MED24","BCL11B","CANT1","KRT13","KRT15","TOB1","SLC7A2","LAD1","TUBB2B","TBC1D30","SEC14L2","ENDOD1","HR","SCARB1","NCOR2","RHOD","INPP5F","PPIF","DHRS3","FDFT1","GAB2","UNC119","KLF10","HES1","FKBP5","SLC2A1","AMFR","NADSYN1","INHBB","BHLHE40","CALB2","FASN","CHPT1","MYBBP1A","ELOVL5","DYNLT3","ABLIM1","SOX3","SLC24A3","RAB17","MAST4","KCNK5","ELF1","RPS6KA2","ISG20L2","IL6ST","SYNGR1","SH3BP5","ALDH3B1","THSD4","CLIC3","NXT1","NAV2","RRP12","ADCY1","DHCR7","MICB","AKAP1"]
+colorList(lst,lstname)
+
+lstname="Reactome_Intraflagellar"
+lst=["CLUAP1","DYNC2H1","DYNC2LI1","DYNLL1","DYNLL2","DYNLRB1","DYNLRB2","HSPB11","IFT122","IFT140","IFT172","IFT20","IFT22","IFT27","IFT43","IFT46","IFT52","IFT57","IFT74","IFT80","IFT81","IFT88","KIF17","KIF3A","KIF3B","KIF3C","KIFAP3","TCTE3","TCTEX1D1","TCTEX1D2","TNPO1","TRAF3IP1","TRIP11","TTC21B","TTC26","TTC30A","TTC30B","WDR19","WDR34","WDR35","WDR60"]
+colorList(lst,lstname)
+
+lstname="FDA_Targets"
+lst=["ABAT","ABCA1","ABCC1","ABCC2","ABCC8","ABL1","ACE","ACE2","ACHE","ADA","ADH1A","ADH1B","ADH1C","ADK","ADORA1","ADORA2A","ADORA2B","ADORA3","ADRA1A","ADRA1B","ADRA1D","ADRA2A","ADRA2B","ADRA2C","ADRB1","ADRB2","ADRB3","AGTR1","AKR1C2","AKR1D1","ALAD","ALDH2","ALK","ALOX5","ALPPL2","AMY2A","ANO1","ANXA1","AOC3","APEX1","AR","ASIC1","ATIC","ATP1A1","ATP2C1","ATP4A","ATP6V1B2","AVPR1A","AVPR1B","AVPR2","BCHE","BCL2","BCR","BDKRB2","BGLAP","BLVRB","BRAF","C3","C4A","C4B","C5","CA1","CA14","CA2","CA3","CA4","CA7","CACNA1A","CACNA1B","CACNA1C","CACNA1D","CACNA1F","CACNA1G","CACNA1H","CACNA1I","CACNA1S","CACNA2D1","CACNA2D2","CACNB1","CACNB2","CACNB3","CACNB4","CACNG1","CALY","CAMLG","CARTPT","CASR","CAT","CCKAR","CCKBR","CCL2","CCND1","CCR5","CD2","CD247","CD33","CD3D","CD3E","CD3G","CD4","CD44","CD52","CD80","CD86","CES1","CFTR","CHD1","CHRFAM7A","CHRM1","CHRM2","CHRM3","CHRM4","CHRM5","CHRNA10","CHRNA2","CHRNA3","CHRNA4","CHRNA7","CHRNB2","CHRNB4","CKB","CKM","CKMT1A","CKMT1B","CKMT2","CLCN2","CNR1","CNR2","COMT","CPS1","CPT1A","CPT2","CRBN","CSF2RA","CSF2RB","CSF3R","CTLA4","CXCR4","CYP11B1","CYP17A1","CYP19A1","CYP51A1","CYSLTR1","CYSLTR2","DBH","DCK","DDC","DDR2","DHFR","DHODH","DNMT1","DPEP1","DPP4","DRD1","DRD2","DRD3","DRD4","DRD5","EDNRA","EDNRB","EGF","EGFR","ELANE","EPHA2","EPOR","ERBB2","ERBB4","ESR1","ESR2","ESRRG","F10","F11","F2","F5","F7","F8","F9","FADS1","FADS2","FASN","FCER1A","FCER1G","FCGR1A","FCGR1B","FCGR2A","FCGR2B","FCGR3A","FCGR3B","FDPS","FFAR1","FGA","FGF1","FGF2","FGFR1","FGFR2","FKBP1A","FLT1","FLT3","FLT4","FN1","FOLH1","FRK","FSHR","FTH1","FTL","FXYD2","GAA","GABBR1","GABBR2","GABRA1","GABRA2","GABRA3","GABRA4","GABRA5","GABRA6","GABRB1","GABRB2","GABRB3","GABRD","GABRE","GABRG1","GABRG2","GABRG3","GABRP","GABRQ","GABRR1","GABRR2","GABRR3","GALNT8","GAMT","GANAB","GANC","GART","GCGR","GGCX","GGPS1","GHR","GHRHR","GLP1R","GLP2R","GLRA1","GLRA2","GLRA3","GLRB","GNRHR","GRIA1","GRIK1","GRIN1","GRIN2A","GRIN2B","GRIN2C","GRIN2D","GRIN3A","GRIN3B","GRM5","GSR","GSS","GUCY1A2","GUCY2C","HBA1","HBA2","HBB","HCAR2","HCAR3","HDAC1","HDAC2","HDAC3","HDAC6","HDAC9","HMGCR","HMMR","HPD","HPRT1","HRH1","HRH2","HRH3","HSD3B1","HSD3B2","HTR1A","HTR1B","HTR1D","HTR1F","HTR2A","HTR2B","HTR2C","HTR3A","HTR4","HTR6","HTR7","ICAM1","IDE","IFNAR1","IFNAR2","IFNG","IFNGR1","IFNGR2","IGF1R","IKBKB","IL11RA","IL17A","IL1B","IL1R1","IL2RA","IL2RB","IL2RG","IL3RA","IL6R","IMPDH1","IMPDH2","INSR","ITGA2B","ITGA4","ITGAL","ITGAV","ITGB1","ITGB3","JAK1","JAK2","JAK3","JUN","KCNA1","KCNA10","KCNA2","KCNA3","KCNA4","KCNA5","KCNA6","KCNA7","KCNB1","KCNB2","KCNC1","KCNC2","KCNC3","KCND1","KCND2","KCND3","KCNE1","KCNH2","KCNJ1","KCNJ11","KCNJ12","KCNJ8","KCNK2","KCNK3","KCNK9","KCNMA1","KCNN4","KCNQ1","KCNQ2","KCNQ3","KDR","KEAP1","KIT","LCK","LHCGR","LIPF","LPL","M6PR","MAOA","MAOB","MAP1A","MAP2","MAP2K1","MAP2K2","MAP4","MAPK1","MAPK11","MAPK3","MAPT","MC2R","MET","METAP2","MGAM","MME","MMP1","MMP10","MMP11","MMP12","MMP13","MMP14","MMP15","MMP16","MMP17","MMP19","MMP2","MMP20","MMP21","MMP23B","MMP24","MMP25","MMP26","MMP27","MMP28","MMP3","MMP7","MMP8","MMP9","MPL","MR1","MS4A1","MS4A2","MTNR1A","MTNR1B","MTOR","MTR","MTTP","MUT","NFKB1","NNMT","NOS2","NOS3","NOXO1","NPC1L1","NPR1","NPR2","NR1I2","NR3C1","NR3C2","NTRK1","NTSR2","OPRD1","OPRK1","OPRM1","OXTR","P2RY12","P2RY2","PAH","PDE10A","PDE3A","PDE4A","PDE4B","PDE4C","PDE4D","PDE5A","PDE7A","PDE7B","PDE8A","PDE8B","PDGFRA","PDGFRB","PDXK","PGF","PGR","PLA2G1B","PLA2G2A","PLA2G4A","PLA2G6","PLAT","PLAU","PLAUR","PLCL1","PLG","PLIN3","PNLIP","PNP","POLA1","POLB","POLE","POLE2","POLE3","POLE4","PPARA","PPARD","PPARG","PPP3R2","PRDX5","PRKAA1","PRKAB1","PRLR","PROC","PROS1","PSMB1","PSMB10","PSMB2","PSMB5","PSMB8","PSMB9","PSMD1","PSMD2","PTGER1","PTGER2","PTGER3","PTGER4","PTGFR","PTGIR","PTGIS","PTGS1","PTGS2","PTH2R","QPRT","RAF1","RAMP1","RAMP2","RAMP3","RARA","RARB","RARG","REN","RET","RFK","RPL3","RRM1","RRM2","RRM2B","RXRA","RXRB","RXRG","RYR1","S1PR5","SCN10A","SCN11A","SCN1A","SCN1B","SCN2A","SCN2B","SCN3A","SCN3B","SCN4A","SCN4B","SCN5A","SCN9A","SCNN1A","SCNN1B","SCNN1D","SCNN1G","SCTR","SDHD","SERPINB2","SERPINC1","SERPIND1","SERPINE1","SHMT1","SI","SIGMAR1","SIRT5","SLC12A1","SLC12A2","SLC12A3","SLC12A4","SLC12A5","SLC18A1","SLC18A2","SLC22A11","SLC22A6","SLC22A8","SLC25A4","SLC25A5","SLC25A6","SLC52A2","SLC5A2","SLC6A1","SLC6A2","SLC6A3","SLC6A4","SLC6A8","SLC7A11","SLC8A1","SLCO2B1","SMO","SMOX","SMS","SNAP25","SOAT1","SPECC1L-ADORA2A","SQLE","SRC","SRD5A1","SRD5A2","SSTR1","SSTR2","SSTR5","SV2A","SYT2","TAAR1","TACR1","TBXA2R","TBXAS1","TEK","TFPI","TH","THRA","THRB","TLR2","TLR7","TLR9","TNF","TNFRSF8","TNFSF11","TNFSF13B","TNNC1","TOP1","TOP1MT","TOP2A","TOP2B","TPH1","TPK1","TPMT","TPO","TRPA1","TRPM8","TRPV3","TSHR","TSPO","TUBA1A","TUBA4A","TUBB","TUBB1","TUBB3","TUBB4B","TUBD1","TUBE1","TUBG1","TYMS","TYR","UGCG","VAMP1","VAMP2","VDR","VEGFA","VEGFB","VKORC1","VKORC1L1","VWF","XDH","YES1"]
+colorList(lst,lstname)
+
+lstname="PAM50"
+lst=["UBE2T","BIRC5","NUF2","CDC6","CCNB1","TYMS","MYBL2","CEP55","MELK","NDC80","RRM2","UBE2C","CENPF","PTTG1","EXO1","ORC6L","ANLN","CCNE1","CDC20","MKI67","KIF2C","ACTR3B","MYC","EGFR","KRT5","PHGDH","CDH3","MIA","KRT17","FOXC1","SFRP1","KRT14","ESR1","SLC39A6","BAG1","MAPT","PGR","CXXC5","MLPH","BCL2","MDM2","NAT1","FOXA1","BLVRA","MMP11","GPR160","FGFR4","GRB7","TMEM45B","ERBB2"]
+colorList(lst,lstname)
+
+
+
+lstname="Fredlund_Classifier"
+fredClassColor = {"Stroma":Color(0xe31a1c),"Lipid":Color(0xb15928),"Immune":Color(0xb2df8a),"Proliferation":Color(0xffff99),"Basal":Color(0xbc2025),"Steroid Response":Color(0xfb9a99),"NA":Color(0xe5e1e8)}
+for n in g.nodes:  
+     v = n["fredlundclassifier"]     
+     n.color = fredClassColor[v]
+     if str(v) != "NA": 
+        n.label = str(n.name)
+     else: 
+        n.label = ""
+
+
+exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Other/Fredlund_Classifier.pdf")
+exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Other/Fredlund_Classifier.pdf")
+
+
+
+
+dolabels  = ["CDC20","ESR1","PGR","CREB1","ERBB2","MET","SOX10","CD8A","CD5","ALB","PLIN1","NGFR","MKI67"]
+ProtColRange = {"Erythrocyte":Color(0xe31a1c),"Plasma":Color(0xff7f00),"Adipose":Color(0xb15928),
+                "ECM.1":Color(0x6a3d9a),"ECM.2":Color(0xcab2d6),"Luminal":Color(0x1f78b4),
+                "Transcription":Color(0xa6cee3),"Immune":Color(0xb2df8a),"No enrichment":Color(0xd8b365),
+                "Golgi":Color(0xfdbf6f),"Basal":Color(0xbc2025),"Mitochondrion":Color(0x33a02c),
+                "Proliferation":Color(0xffff99),"HER2.amplicon":Color(0xfb9a99),"NA":Color(0xe5e1e8),
+                "No.enrichment":Color(0xe5e1e8)}
+
+for n in g.nodes:  
+     v = n["bclandscapeproteinclustering"]     
+     n.color = ProtColRange[v]
+     if str(n.name) in dolabels: 
+        n.label = str(n.name)
+     else: 
+        n.label = ""
+
+exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Other/bclandscapeproteinclustering.pdf")
+exportGraph("/Z/aleferna/Breast_Cancer_Landscape/Network_Figure/Other/bclandscapeproteinclustering.pdf")
+
+
+
+
+
+
+
+
+
